@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tic Tac Toe Game</title>
+<style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #2a2b2dff;
+      }
+      h1 {
+        margin-top: 50px;
+        color: white;
+      }
+      .board {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        width: 320px;
+        height: 320px;
+        margin: 20px auto;
+        background-color: #fff;
+        border: 1px solid #black;
+        border-radius: 5px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+      .cell {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
+        height: 100px;
+        font-size: 80px;
+        cursor: pointer;
+        color: #2a2b2dff;
+        transition: all 0.3s ease;
+      }
+      .cell:hover {
+        background-color: #f0f0f0;
+      }
+      .cell.x {
+        color: #f44336;
+      }
+      .cell.o {
+        color: #2196f3;
+      }
+      #message {
+        font-size: 24px;
+        margin-top: 20px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tic Tac Toe Game</h1>
+    <div class="board">
+      <div class="cell" id="0"></div>
+      <div class="cell" id="1"></div>
+      <div class="cell" id="2"></div>
+      <br>
+      <div class="cell" id="3"></div>
+      <div class="cell" id="4"></div>
+      <div class="cell" id="5"></div>
+      <br>
+      <div class="cell" id="6"></div>
+      <div class="cell" id="7"></div>
+      <div class="cell" id="8"></div>
+    </div>
+    <div id="message"></div> <br>
+  <button id="reset">Reset</button>
+  <script>
+    // ...
+    var resetButton = document.getElementById('reset');
+    resetButton.addEventListener('click', function() {
+      cells.forEach(function(cell) {
+        cell.innerText = '';
+        cell.addEventListener('click', handleCellClick);
+      });
+      message.innerText = '';
+      currentPlayer = player1;
+    });
+  </script> 
+    <script>
+      var player1 = 'X';
+      var player2 = 'O';
+      var currentPlayer = player1;
+      var cells = document.querySelectorAll('.cell');
+      var message = document.getElementById('message');
+      
+      function handleCellClick(event) {
+        var cell = event.target;
+        if (cell.innerText === '') {
+          cell.innerText = currentPlayer;
+          if (checkWin()) {
+            message.innerText = currentPlayer + ' wins!';
+            cells.forEach(function(cell) {
+              cell.removeEventListener('click', handleCellClick);
+            });
+            return;
+          }
+          if (checkTie()) {
+            message.innerText = 'It\'s a tie!';
+            return;
+          }
+          currentPlayer = currentPlayer === player1 ? player2 : player1;
+        }
+      }
+      
+      function checkWin() {
+        var winningCombinations = [
+          [0, 1, 2], [3, 4, 5], [6, 7, 8], // horizontal
+          [0, 3, 6], [1, 4, 7], [2, 5, 8], // vertical
+          [0, 4, 8], [2, 4, 6] // diagonal
+        ];
+        return winningCombinations.some(function(combo) {
+          return combo.every(function(i) {
+            return cells[i].innerText === currentPlayer;
+          });
+        });
+      }
+      
+      function checkTie() {
+        return Array.from(cells).every(function(cell) {
+          return cell.innerText !== '';
+        });
+      }
+      
+      cells.forEach(function(cell) {
+        cell.addEventListener('click', handleCellClick);
+      });
+    </script>
+  </body>
+</html>
